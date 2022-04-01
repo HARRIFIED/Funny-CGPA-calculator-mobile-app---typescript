@@ -1,0 +1,5 @@
+export enum ActionTypes {
+    GET_GPA = "GET_GPA",
+    INCREASE_INPUT = "INCREASE_INPUT",
+    DECREASE_INPUT = "DECREASE_INPUT",
+}

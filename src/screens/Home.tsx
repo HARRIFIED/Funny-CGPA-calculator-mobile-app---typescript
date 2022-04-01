@@ -1,10 +1,14 @@
 import React from 'react';
-import { View, Text } from 'react-native'
+import { View, Text, Pressable } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { increaseInput, decreaseInput } from '../redux/GPA_calculator/actions/actions';
+import Main from '../components/Main';
 
 export default function Home () {
+    const dispatch = useDispatch()
     return (
         <View>
-            <Text>HELLO</Text>
+            <Main />
         </View>
     );
 }
