@@ -1,8 +1,18 @@
 import React from 'react';
-import { View, FlatList, Text, StyleSheet, TextInput, Pressable, Dimensions } from 'react-native';
+import { 
+    View, 
+    FlatList, 
+    StyleSheet, 
+    TextInput,
+    Dimensions, 
+    KeyboardAvoidingView,
+    Platform,
+    TouchableWithoutFeedback,
+     Keyboard
+ } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { GPA_REDUCER } from '../redux/GPA_calculator/reducer/gpa_reducer';
-
+import StickyHeaderFooterScrollView from 'react-native-sticky-header-footer-scroll-view';
 import { increaseInput, decreaseInput } from '../redux/GPA_calculator/actions/actions';
 import Header from './Header';
 import Tab from './Tab';
@@ -29,61 +39,112 @@ export default function Main() {
     const [grade, setGrade] = React.useState()
     const [credit, setCredit] = React.useState()
 
-    function FooterList() {
-        return (
-            <View style={styles.tab}>
-                <Pressable onPress={() => dispatch(increaseInput())}>
-                    <Text style={{textAlign: 'center', fontSize: 18, color: 'white'}}>Increase</Text>
-                </Pressable>
-            </View>
-        );
-    }
     return (
-        
-            <FlatList 
-                data={data.textSpace}
-                renderItem ={() => (
-                    <View style={styles.textinput}>
-                        <TextInput 
-                            value={course}
-                            placeholder ="COURSE"
-                            keyboardType="default"
-                        />
-                        <TextInput 
-                            value={grade}
-                            placeholder ="GRADE"
-                            keyboardType="default"
-                        />
-                        <TextInput 
-                            value={credit}
-                            placeholder ="CREDIT"
-                            keyboardType="numeric"
-                        />
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <StickyHeaderFooterScrollView
+        renderStickyHeader={() => (
+            <View>
+            <HeaderList />
+            </View>
+        )}
+        renderStickyFooter={() => (
+            <View>
+                <Tab />
+            </View>
+        )}
+        additionalHeightReserve ={0}
+        >
+        <View style={{ height: windowHeight / 1.3, backgroundColor: '#eee' }}>
+        <FlatList 
+            data={data.textSpace}
+            renderItem={() => (
+                <View style={styles.textinput}>
+
+                    <View style={styles.back}>
+                        <View style={styles.textspace}>
+                            <TextInput 
+                                style={{fontSize: 18, color: 'black', textAlign: 'center'}}
+                                value={course}
+                                placeholder ="COURSE"
+                                keyboardType="default"
+                            />
+                        </View>
                     </View>
-                )}
-                ListHeaderComponent={HeaderList}
-                stickyHeaderIndices={[0]}
-                ListFooterComponent={FooterList}
-            />            
+
+                    <View style={styles.back}>
+                        <View style={styles.textspace}>
+                            <TextInput 
+                                style={{fontSize: 18, color: 'black', textAlign: 'center'}}
+                                value={grade}
+                                placeholder ="GRADE"
+                                keyboardType="default"
+                            />
+                        </View>
+                    </View>
+
+                    <View style={styles.back}>
+                        <View style={styles.textspace}>
+                            <TextInput 
+                                style={{fontSize: 18, color: 'black', textAlign: 'center'}}
+                                value={credit}
+                                placeholder ="CREDIT"
+                                keyboardType="numeric"
+                            />
+                        </View>
+                    </View>
+                </View>
+            )}
+        />
+        </View>
+        </StickyHeaderFooterScrollView>
+        </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
     );
+
+    
 }
 
 
 
 const styles = StyleSheet.create({
     main: {
-        backgroundColor: '#d6d0d6'
+        backgroundColor: '#d6d0d6',
+        flex: 1
     },
     textinput: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginTop: 5
+        alignItems: 'center',
+        marginTop: 10,
+        marginBottom: 2,
+        marginRight: 5,
+        marginLeft: 5
     },
-    tab: {
-        width: windowWidth,
-        height: windowHeight / 6,
-        marginBottom: 0,
-        backgroundColor: 'black',
-        marginTop: 10
-    }
+    
+    textspace: {
+        height: 32,
+        width: 111,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderLeftColor: '#b804a6',
+        backgroundColor: '#eee',
+        borderTopEndRadius: 9,
+        borderBottomEndRadius: 9,
+        borderBottomStartRadius: 9,
+    },
+
+    back: {
+        backgroundColor: '#b804a6',
+        height: 38,
+        width: 115,
+        borderTopEndRadius: 10,
+        borderBottomEndRadius: 10,
+        borderBottomStartRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderColor: '#b804a6'
+    }    
 })

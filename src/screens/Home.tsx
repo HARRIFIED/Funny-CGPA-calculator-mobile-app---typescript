@@ -1,14 +1,21 @@
 import React from 'react';
-import { View, Text, Pressable } from 'react-native';
-import { useDispatch } from 'react-redux';
-import { increaseInput, decreaseInput } from '../redux/GPA_calculator/actions/actions';
+import { 
+    KeyboardAvoidingView,
+    Platform,
+    TouchableWithoutFeedback,
+     Keyboard
+} from 'react-native';
+
 import Main from '../components/Main';
 
 export default function Home () {
-    const dispatch = useDispatch()
     return (
-        <View>
-            <Main />
-        </View>
+        <KeyboardAvoidingView
+           behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <Main />
+            </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     );
 }
