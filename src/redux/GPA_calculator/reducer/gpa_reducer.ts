@@ -3,14 +3,27 @@ import { Action } from '../actions/actions';
 
 export const GPA_REDUCER = 'gpaReducer';
 
+let num = 2
+
 const initialState = {
     textSpace: [
-        {COURSE: "", GRADE: "", CREDIT: "" },
-        {COURSE: "", GRADE: "", CREDIT: "" },
+        {
+            id: 1,
+            COURSE: "",
+            GRADE: "",
+            CREDIT:""
+        },
+        {
+            id: num++,
+            COURSE: "",
+            GRADE: "",
+            CREDIT:""
+        }
     ],
     
     result: ""
 }
+
 
 
 export function gpaReducer(state = initialState, action: Action) {
@@ -21,18 +34,31 @@ export function gpaReducer(state = initialState, action: Action) {
             return {
                 ...state,
                 ...payload,
-                textspace: (state.textSpace).push({COURSE: "", GRADE: "", CREDIT: "" })
+                textSpace: [...(state.textSpace), {
+                    id: num++,
+                    COURSE: "",
+                    GRADE: "",
+                    CREDIT: ""
+                }]
             }
         
         case ActionTypes.DECREASE_INPUT:
             return {
                 ...state,
-                ...payload,
-                textspace:
-                    (state.textSpace).length <= 2 ? 
-                        (state.textSpace) : (state.textSpace).pop()
+                
             }
-        
+
+        case ActionTypes.LOAD_SCREEN:
+            return {
+                ...state,
+                ...payload,
+                textSpace: (state.textSpace).map(value => {
+                    value.COURSE = value.COURSE.concat(action.payload)
+                    value.GRADE = value.GRADE.concat(action.payload)
+                    value.CREDIT = value.CREDIT.concat(action.payload)
+                })
+            }
+
         default:
             return state
     }

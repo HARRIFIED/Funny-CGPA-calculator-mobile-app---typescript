@@ -29,10 +29,24 @@ interface decrease_input {
     payload?: any
 }
 
-export function decreaseInput():decrease_input {
+export function decreaseInput(value: any):decrease_input {
     return {
         type: ActionTypes.DECREASE_INPUT,
+        payload: value
     };
 }
 
-export type Action = get_gpa | increase_input | decrease_input 
+interface load_screen {
+    type: ActionTypes.LOAD_SCREEN;
+    payload?: any
+}
+
+
+export function loadScreen(value: string): load_screen {
+    return {
+        type: ActionTypes.LOAD_SCREEN,
+        payload: value
+    };
+}
+
+export type Action = get_gpa | increase_input | decrease_input | load_screen;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { 
     View, 
     FlatList, 
@@ -8,12 +8,12 @@ import {
     KeyboardAvoidingView,
     Platform,
     TouchableWithoutFeedback,
-     Keyboard
+    Keyboard
  } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { GPA_REDUCER } from '../redux/GPA_calculator/reducer/gpa_reducer';
 import StickyHeaderFooterScrollView from 'react-native-sticky-header-footer-scroll-view';
-import { increaseInput, decreaseInput } from '../redux/GPA_calculator/actions/actions';
+import { increaseInput, decreaseInput, loadScreen } from '../redux/GPA_calculator/actions/actions';
 import Header from './Header';
 import Tab from './Tab';
 
@@ -35,76 +35,80 @@ export default function Main() {
     const data = useSelector((state: any) => {
         return state[GPA_REDUCER]
     })
-    const [course, setCourse] = React.useState()
-    const [grade, setGrade] = React.useState()
-    const [credit, setCredit] = React.useState()
+    const [course, setCourse] = useState("")
+    const [grade, setGrade] = useState("")
+    const [credit, setCredit] = useState("")
 
+    console.log(course, grade, credit)
+    
     return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <StickyHeaderFooterScrollView
-        renderStickyHeader={() => (
-            <View>
-            <HeaderList />
-            </View>
-        )}
-        renderStickyFooter={() => (
-            <View>
-                <Tab />
-            </View>
-        )}
-        additionalHeightReserve ={0}
-        >
-        <View style={{ height: windowHeight / 1.3, backgroundColor: '#eee' }}>
-        <FlatList 
-            data={data.textSpace}
-            renderItem={() => (
-                <View style={styles.textinput}>
-
-                    <View style={styles.back}>
-                        <View style={styles.textspace}>
-                            <TextInput 
-                                style={{fontSize: 18, color: 'black', textAlign: 'center'}}
-                                value={course}
-                                placeholder ="COURSE"
-                                keyboardType="default"
-                            />
-                        </View>
+            <StickyHeaderFooterScrollView
+                renderStickyHeader={() => (
+                    <View>
+                    <HeaderList />
+                    </View> 
+                )}
+                renderStickyFooter={() => (
+                    <View>
+                        <Tab />
                     </View>
+                )}
+                additionalHeightReserve ={0}
+            >
+                <View style={{ height: windowHeight / 1.3, backgroundColor: '#eee' }}>
+                <FlatList 
+                    data={data.textSpace}
+                    keyExtractor={(item => item.id)}
+                    renderItem={() => (
+                        <View style={styles.textinput}>
 
-                    <View style={styles.back}>
-                        <View style={styles.textspace}>
-                            <TextInput 
-                                style={{fontSize: 18, color: 'black', textAlign: 'center'}}
-                                value={grade}
-                                placeholder ="GRADE"
-                                keyboardType="default"
-                            />
-                        </View>
-                    </View>
+                            <View style={styles.back}>
+                                <View style={styles.textspace}>
+                                    <TextInput 
+                                        style={{fontSize: 18, color: 'black', textAlign: 'center'}}
+                                        placeholder ="COURSE"
+                                        keyboardType="default"
+                                        onChangeText={text => setCourse(text)}
+                                        onKeyPress={() => dispatch(loadScreen(course))}
+                                    />
+                                </View>
+                            </View>
 
-                    <View style={styles.back}>
-                        <View style={styles.textspace}>
-                            <TextInput 
-                                style={{fontSize: 18, color: 'black', textAlign: 'center'}}
-                                value={credit}
-                                placeholder ="CREDIT"
-                                keyboardType="numeric"
-                            />
+                            <View style={styles.back}>
+                                <View style={styles.textspace}>
+                                    <TextInput 
+                                        style={{fontSize: 18, color: 'black', textAlign: 'center'}}
+                                        placeholder ="GRADE"
+                                        keyboardType="default"
+                                        onChangeText={text => setCourse(text)}
+                                        onKeyPress={() => dispatch(loadScreen(grade))}
+                                    />
+                                </View>
+                            </View>
+
+                            <View style={styles.back}>
+                                <View style={styles.textspace}>
+                                    <TextInput 
+                                        style={{fontSize: 18, color: 'black', textAlign: 'center'}}
+                                        placeholder ="CREDIT"
+                                        keyboardType="numeric"
+                                        onChangeText={text => setCourse(text)}
+                                        onKeyPress={() => dispatch(loadScreen(credit))}
+                                    />
+                                </View>
+                            </View>
                         </View>
-                    </View>
+                    )}
+                />
                 </View>
-            )}
-        />
-        </View>
-        </StickyHeaderFooterScrollView>
+            </StickyHeaderFooterScrollView>
         </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
     );
-
-    
 }
 
 
